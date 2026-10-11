@@ -194,7 +194,24 @@ h1 em { color: var(--sage); font-weight: 400; }
 .wheel-card img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
 .wheel-card::after { content: attr(data-label); position: absolute; inset: auto 10px 12px; color: #5e5e53; text-align: center; font-family: "Segoe Print", cursive; font-size: .72rem; }
 .wheel-card.is-center { cursor: zoom-in; }
-.wheel-card.is-center::before { content: "open me"; position: absolute; right: -28px; top: -18px; background: var(--butter); color: var(--ink); border-radius: 999px; padding: 8px 12px; font-family: "Segoe Print", cursive; font-size: .7rem; transform: rotate(8deg); z-index: 4; }
+.wheel-open-button {
+  position: absolute;
+  left: calc(50% + 106px);
+  top: calc(50% - 188px);
+  z-index: 30;
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 15px;
+  background: var(--butter);
+  color: var(--ink);
+  font-family: "Segoe Print", cursive;
+  font-size: .72rem;
+  cursor: pointer;
+  box-shadow: 0 9px 24px rgba(17, 28, 17, .22);
+  transform: rotate(8deg);
+  transition: transform .2s ease, background .2s ease;
+}
+.wheel-open-button:hover { background: #f8e5a8; transform: rotate(3deg) scale(1.08); }
 .wheel-controls { display: flex; justify-content: center; align-items: center; gap: 22px; margin-top: 4px; }
 .wheel-controls span { min-width: 72px; text-align: center; font-size: .75rem; letter-spacing: .15em; color: rgba(255,255,255,.68); font-variant-numeric: tabular-nums; }
 .round-button { width: 48px; height: 48px; border: 1px solid rgba(255,255,255,.25); border-radius: 50%; background: rgba(255,255,255,.07); color: white; font-size: 1.25rem; cursor: pointer; transition: background .2s, transform .2s; }
@@ -215,10 +232,33 @@ footer span:nth-child(2) { color: var(--rose); }
 
 dialog { border: 0; padding: 0; }
 dialog::backdrop { background: rgba(27, 31, 25, .83); backdrop-filter: blur(8px); }
-.lightbox { width: min(1000px, calc(100% - 24px)); max-width: none; height: min(760px, calc(100% - 24px)); max-height: none; background: transparent; overflow: visible; color: white; }
-.lightbox[open] { display: grid; grid-template-columns: 62px 1fr 62px; align-items: center; }
-.lightbox figure { margin: 0; min-width: 0; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.lightbox figure img { max-width: 100%; max-height: calc(100% - 70px); object-fit: contain; border: 10px solid #fffdf8; box-shadow: 0 25px 80px rgba(0,0,0,.35); }
+.lightbox {
+  inset: 0;
+  width: 100vw;
+  max-width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  max-height: 100vh;
+  max-height: 100dvh;
+  margin: 0;
+  padding: 18px;
+  background: transparent;
+  overflow: hidden;
+  color: white;
+}
+.lightbox[open] { display: grid; grid-template-columns: 62px minmax(0, 1fr) 62px; align-items: center; }
+.lightbox figure { margin: 0; min-width: 0; min-height: 0; height: calc(100vh - 36px); height: calc(100dvh - 36px); display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+.lightbox figure img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: min(820px, calc(100vw - 190px));
+  max-height: calc(100vh - 130px);
+  max-height: calc(100dvh - 130px);
+  object-fit: contain;
+  border: 10px solid #fffdf8;
+  box-shadow: 0 25px 80px rgba(0,0,0,.35);
+}
 .lightbox figcaption { width: min(720px, 100%); padding: 16px 4px 0; display: flex; justify-content: space-between; align-items: center; }
 #lightboxNumber { color: rgba(255,255,255,.7); font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; }
 .lightbox-close { position: fixed; top: 22px; right: 26px; width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(255,255,255,.3); background: rgba(0,0,0,.12); color: white; font-size: 1.8rem; line-height: 1; cursor: pointer; z-index: 5; }
@@ -232,10 +272,31 @@ dialog::backdrop { background: rgba(27, 31, 25, .83); backdrop-filter: blur(8px)
 .bouquet-header { display: flex; justify-content: space-between; align-items: flex-start; }
 .bouquet-header h2 { margin: 0; font-size: clamp(2.3rem, 5vw, 4rem); }
 .bouquet-close { position: static; background: var(--ink); }
+.bouquet-toolbar { margin-top: 20px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.bouquet-toolbar p { margin: 0; max-width: 430px; color: #77746b; line-height: 1.5; }
+.collage-button { border: 0; border-radius: 999px; padding: 12px 17px; background: var(--ink); color: white; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; white-space: nowrap; }
+.collage-button:hover { background: var(--sage-dark); }
+.collage-button:disabled { opacity: .45; cursor: not-allowed; }
+.collage-button[aria-pressed="true"] { background: var(--rose); }
 .bouquet-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 28px; }
 .bouquet-grid button { border: 0; padding: 0; border-radius: 15px; overflow: hidden; cursor: zoom-in; aspect-ratio: 1; }
 .bouquet-grid img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s; }
 .bouquet-grid button:hover img { transform: scale(1.06); }
+.bouquet-grid.is-collage {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-auto-rows: 86px;
+  grid-auto-flow: dense;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 24px;
+  background: #e8eddf;
+  box-shadow: inset 0 0 0 1px rgba(82, 98, 76, .12);
+}
+.bouquet-grid.is-collage button { aspect-ratio: auto; border: 6px solid var(--paper); border-radius: 5px; box-shadow: 0 10px 22px rgba(50, 55, 44, .14); }
+.bouquet-grid.is-collage .collage-feature { grid-column: span 3; grid-row: span 3; transform: rotate(-1.2deg); }
+.bouquet-grid.is-collage .collage-wide { grid-column: span 3; grid-row: span 2; transform: rotate(1deg); }
+.bouquet-grid.is-collage .collage-tall { grid-column: span 2; grid-row: span 3; transform: rotate(.7deg); }
+.bouquet-grid.is-collage .collage-small { grid-column: span 2; grid-row: span 2; transform: rotate(-.6deg); }
 .bouquet-empty { text-align: center; color: #77746b; padding: 45px 0; }
 
 @media (max-width: 900px) {
@@ -278,16 +339,29 @@ dialog::backdrop { background: rgba(27, 31, 25, .83); backdrop-filter: blur(8px)
   .section-heading h2 { font-size: 3.3rem; }
   .wheel-stage { height: 355px; }
   .wheel-card { width: 198px; height: 260px; padding: 7px 7px 34px; }
-  .wheel-card.is-center::before { right: -14px; }
+  .wheel-open-button { left: calc(50% + 66px); top: calc(50% - 148px); padding: 9px 12px; }
   .promise-section { padding: 55px 14px; }
   .promise-card { padding: 58px 22px; border-radius: 30px; }
   .lightbox[open] { grid-template-columns: 42px 1fr 42px; }
   .lightbox-arrow { padding: 8px; font-size: 1.5rem; }
-  .lightbox figure img { border-width: 6px; }
+  .lightbox { padding: 10px 4px; }
+  .lightbox figure { height: calc(100vh - 20px); height: calc(100dvh - 20px); }
+  .lightbox figure img { max-width: calc(100vw - 96px); max-height: calc(100vh - 120px); max-height: calc(100dvh - 120px); border-width: 6px; }
   .lightbox figcaption { align-items: flex-start; gap: 10px; }
   .favorite-button span:last-child { display: none; }
   .bouquet-dialog { padding: 28px 18px; }
+  .bouquet-toolbar { align-items: flex-start; flex-direction: column; }
   .bouquet-grid { grid-template-columns: repeat(3, 1fr); }
+  .bouquet-grid.is-collage { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: 72px; padding: 10px; }
+  .bouquet-grid.is-collage .collage-feature { grid-column: span 2; grid-row: span 3; }
+  .bouquet-grid.is-collage .collage-wide { grid-column: span 2; grid-row: span 2; }
+  .bouquet-grid.is-collage .collage-tall { grid-column: span 2; grid-row: span 3; }
+  .bouquet-grid.is-collage .collage-small { grid-column: span 2; grid-row: span 2; }
+}
+
+@media (max-height: 540px) {
+  .lightbox figure img { max-height: calc(100dvh - 86px); }
+  .lightbox figcaption { padding-top: 8px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

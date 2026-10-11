@@ -9,6 +9,7 @@ let wheelIndex = 0;
 let lightboxIndex = 0;
 let dragStart = null;
 let dragDistance = 0;
+let collageMode = false;
 let favorites = new Set(JSON.parse(localStorage.getItem("our-bouquet") || "[]"));
 
 function updateCountdown() {
@@ -101,6 +102,17 @@ function renderWheel() {
     stage.appendChild(card);
   });
 
+  const openButton = document.createElement("button");
+  openButton.type = "button";
+  openButton.className = "wheel-open-button";
+  openButton.textContent = "open photo ↗";
+  openButton.setAttribute("aria-label", `Open memory ${wheelIndex + 1}`);
+  openButton.addEventListener("click", (event) => {
+    event.stopPropagation();
+    openLightbox(wheelIndex);
+  });
+  stage.appendChild(openButton);
+
   $("#wheelCounter").textContent = `${pad(wheelIndex + 1)} / ${pad(photos.length)}`;
 }
 
@@ -150,9 +162,12 @@ function renderBouquet() {
   grid.innerHTML = "";
   const saved = [...favorites].filter((index) => photos[index]);
   $("#bouquetEmpty").hidden = saved.length > 0;
-  saved.forEach((index) => {
+  $("#collageButton").disabled = saved.length === 0;
+  const shapes = ["collage-feature", "collage-small", "collage-wide", "collage-tall", "collage-small", "collage-wide"];
+  saved.forEach((index, position) => {
     const button = document.createElement("button");
     button.type = "button";
+    button.className = shapes[position % shapes.length];
     button.setAttribute("aria-label", `Open saved memory ${index + 1}`);
     button.innerHTML = `<img src="${photos[index].thumb}" alt="Saved memory ${index + 1}">`;
     button.addEventListener("click", () => {
@@ -161,6 +176,15 @@ function renderBouquet() {
     });
     grid.appendChild(button);
   });
+}
+
+function setCollageMode(enabled) {
+  collageMode = enabled;
+  const button = $("#collageButton");
+  $("#bouquetGrid").classList.toggle("is-collage", enabled);
+  button.setAttribute("aria-pressed", String(enabled));
+  button.children[1].textContent = enabled ? "Return to neat grid" : "Arrange into a collage";
+  if (enabled) petalBurst(10);
 }
 
 function petalBurst(count = 14) {
@@ -209,6 +233,7 @@ async function initialize() {
     moveWheel(event.deltaX + event.deltaY > 0 ? 1 : -1);
   }, { passive: false });
   stage.addEventListener("pointerdown", (event) => {
+    if (event.target.closest(".wheel-open-button")) return;
     dragStart = event.clientX;
     dragDistance = 0;
     stage.classList.add("dragging");
@@ -240,8 +265,10 @@ async function initialize() {
 
   $("#bouquetButton").addEventListener("click", () => {
     renderBouquet();
+    setCollageMode(false);
     $("#bouquetDialog").showModal();
   });
+  $("#collageButton").addEventListener("click", () => setCollageMode(!collageMode));
   $("#bouquetClose").addEventListener("click", () => $("#bouquetDialog").close());
   $("#bouquetDialog").addEventListener("click", (event) => {
     if (event.target === $("#bouquetDialog")) $("#bouquetDialog").close();
