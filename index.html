@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fbf6ee" />
+    <meta name="description" content="A little garden of memories counting down until we're together again." />
+    <title>Until We’re Together Again</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="petal-layer" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Back to countdown">
+        <span class="brand-flower">✿</span>
+        <span>until we meet</span>
+      </a>
+      <button class="bouquet-pill" id="bouquetButton" type="button" aria-label="Show saved favorite photos">
+        <span aria-hidden="true">❀</span>
+        <span><strong id="bouquetCount">0</strong> in our bouquet</span>
+      </button>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="pageTitle">
+        <div class="hero-copy">
+          <p class="eyebrow">October 30 · 7:30 PM</p>
+          <h1 id="pageTitle">Until I get to<br /><em>hold you again.</em></h1>
+          <p class="intro">Every tiny moment brings us closer. Here’s a little garden of us to make the waiting sweeter.</p>
+          <button class="primary-button" id="surpriseButton" type="button">
+            <span>Pick a memory for me</span>
+            <span aria-hidden="true">↗</span>
+          </button>
+        </div>
+
+        <div class="hero-visual" aria-label="Interactive photo collage">
+          <div class="scribble" aria-hidden="true">almost there!</div>
+          <button class="hero-photo hero-photo-a" data-hero-slot="0" type="button" aria-label="Change this memory">
+            <img alt="A favorite memory together" />
+            <span>tap me</span>
+          </button>
+          <button class="hero-photo hero-photo-b" data-hero-slot="1" type="button" aria-label="Change this memory">
+            <img alt="A favorite memory together" />
+            <span>another day closer</span>
+          </button>
+          <button class="hero-photo hero-photo-c" data-hero-slot="2" type="button" aria-label="Change this memory">
+            <img alt="A favorite memory together" />
+            <span>us, always</span>
+          </button>
+          <div class="daisy daisy-one" aria-hidden="true">✿</div>
+          <div class="daisy daisy-two" aria-hidden="true">✿</div>
+        </div>
+
+        <div class="countdown-wrap" aria-live="polite">
+          <p class="countdown-kicker">We’ll be together in</p>
+          <div class="countdown" id="countdown">
+            <div class="time-unit"><strong id="days">00</strong><span>days</span></div>
+            <div class="time-divider">:</div>
+            <div class="time-unit"><strong id="hours">00</strong><span>hours</span></div>
+            <div class="time-divider">:</div>
+            <div class="time-unit"><strong id="minutes">00</strong><span>minutes</span></div>
+            <div class="time-divider">:</div>
+            <div class="time-unit"><strong id="seconds">00</strong><span>seconds</span></div>
+            <div class="time-divider hundredths-divider">.</div>
+            <div class="time-unit hundredths"><strong id="hundredths">00</strong><span>tiny bits</span></div>
+          </div>
+          <p class="countdown-date">Friday, October 30, 2026 · 7:30 PM ET</p>
+        </div>
+      </section>
+
+      <section class="memory-section" id="memories" aria-labelledby="memoryTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Our memory garden</p>
+            <h2 id="memoryTitle">Take the long way<br />through us.</h2>
+          </div>
+          <p>Drag the wheel, use your arrow keys, or tap a photo. Every little turn is another place we’ve been together.</p>
+        </div>
+
+        <div class="wheel-shell">
+          <div class="wheel-stage" id="wheelStage" tabindex="0" role="region" aria-label="Rotating photo wheel"></div>
+          <div class="wheel-controls">
+            <button class="round-button" id="previousButton" type="button" aria-label="Previous memory">←</button>
+            <span id="wheelCounter">01 / 43</span>
+            <button class="round-button" id="nextButton" type="button" aria-label="Next memory">→</button>
+          </div>
+          <p class="drag-note">drag to wander · tap the center photo to open</p>
+        </div>
+      </section>
+
+      <section class="promise-section">
+        <div class="promise-card">
+          <span class="promise-flower" aria-hidden="true">❁</span>
+          <p>Long distance is only a chapter.</p>
+          <h2>The best part is getting closer every second.</h2>
+          <button class="text-button" id="backToCountdown" type="button">Back to our countdown ↑</button>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>Made for the wait.</span>
+      <span aria-hidden="true">♥</span>
+      <span>Made for us.</span>
+    </footer>
+
+    <dialog class="lightbox" id="lightbox">
+      <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close photo">×</button>
+      <button class="lightbox-arrow lightbox-previous" id="lightboxPrevious" type="button" aria-label="Previous photo">←</button>
+      <figure>
+        <img id="lightboxImage" alt="A memory together" />
+        <figcaption>
+          <span id="lightboxNumber">memory 01</span>
+          <button class="favorite-button" id="favoriteButton" type="button" aria-pressed="false">
+            <span aria-hidden="true">♡</span><span>add to our bouquet</span>
+          </button>
+        </figcaption>
+      </figure>
+      <button class="lightbox-arrow lightbox-next" id="lightboxNext" type="button" aria-label="Next photo">→</button>
+    </dialog>
+
+    <dialog class="bouquet-dialog" id="bouquetDialog">
+      <div class="bouquet-header">
+        <div>
+          <p class="eyebrow">Picked with love</p>
+          <h2>Our little bouquet</h2>
+        </div>
+        <button class="lightbox-close bouquet-close" id="bouquetClose" type="button" aria-label="Close favorites">×</button>
+      </div>
+      <div class="bouquet-grid" id="bouquetGrid"></div>
+      <p class="bouquet-empty" id="bouquetEmpty">Open a memory and tap the heart to start your bouquet.</p>
+    </dialog>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
